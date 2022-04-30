@@ -9,14 +9,20 @@ const HOSTNAME = "localhost"
 const PORT = 3000
 
 app.use(express.static('public'))
-// app.use("view engine", "ejs")
+app.set("view engine", "ejs")
+app.set("views", "views")
+
 
 app.get('/', (req, res) => {
-  res.sendFile('/index.html');
+  res.redirect("/login")
 });
 
-app.get("/home", (req,res) => {
-  app.render("/home.html")
+app.get("/login", (req,res) => {
+  res.render("login")
+})
+
+app.get("/signup", (req,res) => {
+  res.render("signup")
 })
 
 io.on('connection', (socket) => {
