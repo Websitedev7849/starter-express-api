@@ -29,6 +29,12 @@
                                             <p class="text-danger">UserName Not Valid</p>
                                         </div>
                                     <% } %>
+
+									<% if(username  &&  username == "Already Exists") { %>
+                                        <div>
+                                            <p class="text-danger">UserName Already Exists</p>
+                                        </div>
+                                    <% } %>
 								</div>
 
 								<div class="form-group">

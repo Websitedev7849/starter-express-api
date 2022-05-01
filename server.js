@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require('express');
 const bodyParser = require('body-parser')
 const app = express();
@@ -5,6 +7,9 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
+
+const db = require("./src/db")
+
 
 const HOSTNAME = "localhost"
 const PORT = 3000
@@ -31,7 +36,7 @@ app.get("/signup", (req,res) => {
   res.render("signup", {username: undefined, password: undefined, confirmPassword: undefined})
 })
 
-app.post("/signup", (req, res) => {
+app.post("/signup", async (req, res) => {
 
   // console.log(req.body); // { username: 'Siddharth', password: '123', confirmPassword: '123' }
 
@@ -59,7 +64,14 @@ app.post("/signup", (req, res) => {
     return
   }
   
+  // check if username already exists in database 
+  if (await db.isUserAlreadyExist(req.body.username)) {
+    res.render("signup", { username: "Already Exists", password: undefined, confirmPassword: undefined })
+    return
+  }
   
+  res.redirect("/")
+
 })
 
 io.on('connection', (socket) => {
