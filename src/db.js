@@ -58,7 +58,35 @@ function createUser(username, password) {
 
     })
 }
+
+function isUserValid(username, password) {
+    return new Promise(async function (res, rej) {
+     
+        const sql = `SELECT * FROM users WHERE username="${username}" AND password="${password}";`
+        const con = getConnection()
+
+        con.query(sql, function (err, result) {
+            if (err) rej(err);
+                        
+            // result: [
+            //     RowDataPacket { id: 1, username: 'siddharth04', password: '123456' }
+            // ]
+            con.end()
+            
+            if (result.length !== 0) {
+                res(true)
+            }
+            else{
+                rej("Username or Password is Wrong")
+            }
+          
+        });
+
+    })
+}
+
 module.exports = {
     isUserAlreadyExist,
-    createUser
+    createUser,
+    isUserValid
 }

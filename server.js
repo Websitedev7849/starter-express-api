@@ -33,11 +33,36 @@ app.get("/login", (req,res) => {
   // render if redirected from /signup
   // url = ../login?accountsignup=true
   if (req.query.accountsignup) {
-    res.render("login", {accountCreated: true})
+    res.render("login", {accountCreated: true, error: undefined})
     return
   }
 
-  res.render("login", {accountCreated: undefined})
+  res.render("login", {accountCreated: undefined, error: undefined})
+})
+
+app.post("/login", async (req,res) => {
+  
+  try {
+
+    if (await db.isUserValid(req.body.username, req.body.password)) {
+      res.redirect("/home")
+      return
+    }
+  
+  } catch (error) {
+
+    if (error == "Username or Password is Wrong") {
+      res.render("login", {accountCreated: undefined, error: error})      
+    }
+    else {
+      res.render("login", {accountCreated: undefined, error: "Something went wrong"})   
+    }
+  }
+
+})
+
+app.get("/home", (req, res) => {
+  res.send("<h1> HOME </h1>")
 })
 
 app.get("/signup", (req,res) => {
