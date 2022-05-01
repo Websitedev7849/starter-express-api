@@ -38,4 +38,27 @@ function isUserAlreadyExist(username) {
     })
 }
 
-module.exports = {isUserAlreadyExist}
+function createUser(username, password) {
+
+    const con = getConnection()
+
+    const sql = `INSERT INTO users(username, password) VALUES ("${username}", "${password}");`
+
+    return new Promise(function (res, rej) {
+        
+        // query the connection
+        con.query(sql, function (err, result) {
+            if (err) rej(err);
+            
+            con.end()
+            res(true)
+          
+        });
+    
+
+    })
+}
+module.exports = {
+    isUserAlreadyExist,
+    createUser
+}

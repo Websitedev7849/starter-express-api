@@ -29,7 +29,15 @@ app.get('/', (req, res) => {
 });
 
 app.get("/login", (req,res) => {
-  res.render("login")
+
+  // render if redirected from /signup
+  // url = ../login?accountsignup=true
+  if (req.query.accountsignup) {
+    res.render("login", {accountCreated: true})
+    return
+  }
+
+  res.render("login", {accountCreated: undefined})
 })
 
 app.get("/signup", (req,res) => {
@@ -42,7 +50,6 @@ app.post("/signup", async (req, res) => {
 
   // check if username is entered
   if (req.body.username == "") {
-    console.log("render 1");
     res.render("signup", { username: "Not Valid", password: undefined, confirmPassword: undefined })
     return
   }
@@ -50,7 +57,6 @@ app.post("/signup", async (req, res) => {
   // check if passwords are entered
   if (req.body.password == "" ||
     req.body.confirmPassword == "") {
-    console.log("render 2");
     res.render("signup", {username: req.body.username, password: "Not Valid", confirmPassword: "Not Valid" })
     return
   }
@@ -59,7 +65,6 @@ app.post("/signup", async (req, res) => {
   if (req.body.password &&
     req.body.confirmPassword &&
     req.body.password !== req.body.confirmPassword) {
-    console.log("render 2");
     res.render("signup", {username: req.body.username, password: "No Match", confirmPassword: "No Match" })
     return
   }
@@ -70,7 +75,9 @@ app.post("/signup", async (req, res) => {
     return
   }
   
-  res.redirect("/")
+  // register user in database
+  await db.createUser(req.body.username, req.body.password)
+  res.redirect("/login?accountsignup=true")
 
 })
 
