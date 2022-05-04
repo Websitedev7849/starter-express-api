@@ -122,7 +122,7 @@ app.post("/signup", async (req, res) => {
 
     res.cookie("jwt", JWT, {
       maxAge: MAX_AGE
-    }).redirect("/home?username=" + username)
+    }).redirect("/home")
 
 
   } catch (error) {
