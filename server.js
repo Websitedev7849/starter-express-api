@@ -66,7 +66,7 @@ app.get("/home", (req, res) => {
 })
 
 app.get("/signup", (req,res) => {
-  res.render("signup", {username: undefined, password: undefined, confirmPassword: undefined})
+  res.render("signup", {username: undefined, password: undefined, confirmPassword: undefined, error: undefined})
 })
 
 app.post("/signup", async (req, res) => {
@@ -75,14 +75,14 @@ app.post("/signup", async (req, res) => {
 
   // check if username is entered
   if (req.body.username == "") {
-    res.render("signup", { username: "Not Valid", password: undefined, confirmPassword: undefined })
+    res.render("signup", { username: "Not Valid", password: undefined, confirmPassword: undefined, error: undefined })
     return
   }
 
   // check if passwords are entered
   if (req.body.password == "" ||
     req.body.confirmPassword == "") {
-    res.render("signup", {username: req.body.username, password: "Not Valid", confirmPassword: "Not Valid" })
+    res.render("signup", {username: req.body.username, password: "Not Valid", confirmPassword: "Not Valid", error: undefined   })
     return
   }
 
@@ -90,19 +90,24 @@ app.post("/signup", async (req, res) => {
   if (req.body.password &&
     req.body.confirmPassword &&
     req.body.password !== req.body.confirmPassword) {
-    res.render("signup", {username: req.body.username, password: "No Match", confirmPassword: "No Match" })
+    res.render("signup", {username: req.body.username, password: "No Match", confirmPassword: "No Match", error: undefined  })
     return
   }
   
   // check if username already exists in database 
   if (await db.isUserAlreadyExist(req.body.username)) {
-    res.render("signup", { username: "Already Exists", password: undefined, confirmPassword: undefined })
+    res.render("signup", { username: "Already Exists", password: undefined, confirmPassword: undefined, error: undefined  })
     return
   }
   
-  // register user in database
-  await db.createUser(req.body.username, req.body.password)
-  res.redirect("/login?accountsignup=true")
+  try {
+    // register user in database
+    await db.createUser(req.body.username, req.body.password)
+    res.redirect("/login?accountsignup=true")
+  } catch (error) {
+    console.log(error);
+    res.status(500).render("signup", { username: undefined, password: undefined, confirmPassword: undefined, error: "Something went wrong"  })
+  }
 
 })
 

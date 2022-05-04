@@ -77,6 +77,12 @@
 								<div class="mt-4 text-center">
 									Already have an account? <a href="/login">Login</a>
 								</div>
+
+								<% if (error) { %>
+									<div class="alert mt-2 text-center alert-danger" role="alert">
+										<%= error %>
+									</div>
+								<% } %>
 							</form>
 						</div>
 					</div>

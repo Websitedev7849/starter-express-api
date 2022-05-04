@@ -1,4 +1,5 @@
 const mysql = require('mysql');
+const crypto = require("crypto");
 
 function getConnection() {
     return mysql.createConnection({
@@ -42,7 +43,11 @@ function createUser(username, password) {
 
     const con = getConnection()
 
-    const sql = `INSERT INTO users(username, password) VALUES ("${username}", "${password}");`
+    const generatedUserId = crypto.randomBytes(10).toString('hex');
+    // e.g 351ea7a3980b9fa5142c
+
+    const sql = `INSERT INTO users(id, username, password) 
+    VALUES ("${generatedUserId}", "${username}", "${password}");`
 
     return new Promise(function (res, rej) {
         
