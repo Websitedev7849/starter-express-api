@@ -1,6 +1,8 @@
 require('dotenv').config()
 
 const express = require('express');
+const cookieParser = require('cookie-parser');
+const jwt = require("jsonwebtoken");
 const bodyParser = require('body-parser')
 const app = express();
 const http = require('http');
@@ -9,10 +11,12 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 
 const db = require("./src/db")
+const { checkUserValidity } = require("./middlewares/checkUserValidity")
 
 
 const HOSTNAME = "localhost"
 const PORT = 3000
+const MAX_AGE = 5 * 60 * 1000 // 5 Hours
 
 app.use( express.json() );
 app.use( bodyParser.json() );  
@@ -22,10 +26,11 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 app.use(express.static('public'))
 app.set("view engine", "ejs")
 app.set("views", "views")
+app.use(cookieParser());
 
 
 app.get('/', (req, res) => {
-  res.redirect("/login")
+  res.redirect("/home")
 });
 
 app.get("/login", (req,res) => {
@@ -44,11 +49,17 @@ app.post("/login", async (req,res) => {
   
   try {
 
-    if (await db.isUserValid(req.body.username, req.body.password)) {
-      res.redirect("/home")
-      return
-    }
-  
+    const {id, username} = await db.isUserValid(req.body.username, req.body.password)
+    
+    // generate JWT for user
+    const JWT = jwt.sign( {id, username} , process.env.JWT_SECRET_KEY, {
+      expiresIn: "5h"
+    })
+
+    res.cookie("jwt", JWT, {
+      maxAge: MAX_AGE
+    }).redirect("/home")
+
   } catch (error) {
 
     if (error == "Username or Password is Wrong") {
@@ -61,8 +72,8 @@ app.post("/login", async (req,res) => {
 
 })
 
-app.get("/home", (req, res) => {
-  res.send("<h1> HOME </h1>")
+app.get("/home", checkUserValidity, (req, res) => {
+  res.render("home")
 })
 
 app.get("/signup", (req,res) => {
@@ -102,8 +113,18 @@ app.post("/signup", async (req, res) => {
   
   try {
     // register user in database
-    await db.createUser(req.body.username, req.body.password)
-    res.redirect("/login?accountsignup=true")
+    const { id, username } = await db.createUser(req.body.username, req.body.password)
+
+    // generate JWT for user
+    const JWT = jwt.sign({id, username}, process.env.JWT_SECRET_KEY, {
+      expiresIn: "5h"
+    })
+
+    res.cookie("jwt", JWT, {
+      maxAge: MAX_AGE
+    }).redirect("/home?username=" + username)
+
+
   } catch (error) {
     console.log(error);
     res.status(500).render("signup", { username: undefined, password: undefined, confirmPassword: undefined, error: "Something went wrong"  })

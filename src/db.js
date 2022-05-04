@@ -56,7 +56,7 @@ function createUser(username, password) {
             if (err) rej(err);
             
             con.end()
-            res(true)
+            res({id: generatedUserId, username})
           
         });
     
@@ -79,7 +79,7 @@ function isUserValid(username, password) {
             con.end()
             
             if (result.length !== 0) {
-                res(true)
+                res({ id: result[0].id, username: result[0].username })
             }
             else{
                 rej("Username or Password is Wrong")
