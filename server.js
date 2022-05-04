@@ -16,7 +16,7 @@ const { checkUserValidity } = require("./middlewares/checkUserValidity")
 
 const HOSTNAME = "localhost"
 const PORT = 3000
-const MAX_AGE = 5 * 60 * 1000 // 5 Hours
+const MAX_AGE = 5 * 60 * 60 * 1000 // 5 Hours
 
 app.use( express.json() );
 app.use( bodyParser.json() );  
