@@ -9,4 +9,16 @@
 <body>
     <%= username %>
 </body>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const username = "<%= username %>"
+    const userID = "<%= userID %>"
+
+    socket.emit("user-connected", username, userID);
+    socket.on("new_msg", function (data) {
+      console.log(data);
+    })
+  </script>
 </html>

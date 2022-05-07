@@ -133,8 +133,38 @@ app.post("/signup", async (req, res) => {
 })
 
 io.on('connection', (socket) => {
-  console.log("userconnected");
+  socket.on("user-connected", async (username, userID) => {
+
+    console.log(`User ${username} userID: ${userID} connected with socket id : ${socket.id}`);
+
+    // join a room name after its socket id
+    socket.join(socket.id)
+
+
+    try {
+
+      // create ActiveUsers Table in DB
+      await db.registerActiveUser(userID, socket.id)
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        io.sockets.in(socket.id).emit("new_msg", {msg: "already_logged_in"})
+      }
+      else{
+        io.sockets.in(socket.id).emit("new_msg", {msg: "something_went_wrong"})
+      }
+     
+    }
+
+    socket.on("disconnect", () => {
+      console.log(`user ${username} disconnected with id ${socket.id}`);
+    })
+  })
+
+  
+
 });
+
+io.on
 
 
 

@@ -12,6 +12,7 @@ module.exports.checkUserValidity = function (req, res, next) {
             else {
                 // console.log(decodedToken);
                 res.locals.username = decodedToken.username
+                res.locals.userID = decodedToken.id
                 next()
             }
         })

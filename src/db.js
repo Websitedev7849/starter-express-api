@@ -90,8 +90,27 @@ function isUserValid(username, password) {
     })
 }
 
+function registerActiveUser(userID, socketID) {
+    return new Promise((res, rej) => {
+
+        const sql = `INSERT INTO ActiveUsers VALUES ("${userID}", "${socketID}");`
+
+        const con = getConnection();
+
+        con.query(sql, function (err, result) {
+            if (err) rej(err)
+
+            con.end()
+            res(true)
+
+        })
+
+    })
+}
+
 module.exports = {
     isUserAlreadyExist,
     createUser,
-    isUserValid
+    isUserValid,
+    registerActiveUser
 }
