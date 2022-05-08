@@ -146,6 +146,8 @@ io.on('connection', (socket) => {
       // create ActiveUsers Table in DB
       await db.registerActiveUser(userID, socket.id)
     } catch (error) {
+
+      // if user id is already present in ActiveUsers Table
       if (error.code === 'ER_DUP_ENTRY') {
         io.sockets.in(socket.id).emit("new_msg", {msg: "already_logged_in"})
       }
@@ -157,6 +159,13 @@ io.on('connection', (socket) => {
 
     socket.on("disconnect", () => {
       console.log(`user ${username} disconnected with id ${socket.id}`);
+
+      try {
+        db.deRegisterActiveUser(userID)
+      } catch (error) {
+        console.log(error);
+      }
+
     })
   })
 

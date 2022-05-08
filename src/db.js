@@ -90,6 +90,27 @@ function isUserValid(username, password) {
     })
 }
 
+/**
+ * 
+ * @param {String} userID 
+ * @param {String} socketID 
+ * @returns {Promise} Promise
+ * 
+ * FUNCTION WORKS BUT DON'T KNOW HOW
+ * 
+ * Active Users Table: 
+ * CREATE TABLE ActiveUsers(
+    userID  VARCHAR(20) UNIQUE NOT NULL,
+    socketID VARCHAR(30) NOT NULL,
+    FOREIGN KEY (userID) REFERENCES USERS(id) 
+    );
+
+    The unique constraint is supposed stop this function from
+    entering duplicate value in Activeusers table.
+    But when user log in with another browser it is deleting 
+    the old row with same value and then
+    inserting new row with new socket id in column socketID
+ */
 function registerActiveUser(userID, socketID) {
     return new Promise((res, rej) => {
 
@@ -108,9 +129,26 @@ function registerActiveUser(userID, socketID) {
     })
 }
 
+function deRegisterActiveUser(userID) {
+    return new Promise((res, rej) => {
+
+        const sql = `DELETE FROM ActiveUsers WHERE userID = "${userID}";`
+        const con = getConnection()
+
+        con.query(sql, function (err) {
+            if (err) rej(err)
+
+            res(true)
+
+        })
+
+    })
+}
+
 module.exports = {
     isUserAlreadyExist,
     createUser,
     isUserValid,
-    registerActiveUser
+    registerActiveUser,
+    deRegisterActiveUser
 }
