@@ -132,19 +132,51 @@ app.post("/signup", async (req, res) => {
 
 })
 
+app.post("/isUserActive", async (req, res) => {
+  const {username} = req.body;
+  console.log(username);
+  try {
+    const socketInfo = await db.isUserActive(username)
+    // socketInfo = [
+    //   RowDataPacket {
+    //     id: 'dc2fb90d3e748e12caea',
+    //     username: 'Dean_Winchester',
+    //     socketID: 'QpLLr3tGk_ENi22WAAAD'
+    //   }
+    // ]
+
+    console.log(socketInfo);
+
+    if (socketInfo.length == 0) { // if user is not online
+      res.status(404).send({
+        id: "",
+        username: username,
+        socketID: ""
+      })
+    }
+
+    else {
+      res.status(200).send(socketInfo[0])
+    }
+
+  } catch (error) {
+    console.log(error);
+    res.end(error)
+  }
+})
+
 io.on('connection', (socket) => {
   socket.on("user-connected", async (username, userID) => {
 
     console.log(`User ${username} userID: ${userID} connected with socket id : ${socket.id}`);
 
-    // join a room name after its socket id
-    socket.join(socket.id)
-
-
     try {
 
       // create ActiveUsers Table in DB
       await db.registerActiveUser(userID, socket.id)
+
+      // join a room name after its socket id
+      socket.join(socket.id)
     } catch (error) {
 
       // if user id is already present in ActiveUsers Table
@@ -173,7 +205,6 @@ io.on('connection', (socket) => {
 
 });
 
-io.on
 
 
 

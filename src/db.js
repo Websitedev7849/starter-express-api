@@ -131,10 +131,30 @@ function deRegisterActiveUser(userID) {
     })
 }
 
+function isUserActive(username) {
+    return new Promise((res, rej) => {
+
+        const sql = `SELECT users.id, users.username, activeusers.socketID 
+                    FROM users, activeusers 
+                    WHERE users.id = activeusers.userID 
+                    AND users.username = "${username}"`
+        const con = getConnection()
+
+        con.query(sql, function (err, result) {
+            if (err) rej(err)
+
+            res(result)
+
+        })
+
+    })
+}
+
 module.exports = {
     isUserAlreadyExist,
     createUser,
     isUserValid,
     registerActiveUser,
-    deRegisterActiveUser
+    deRegisterActiveUser,
+    isUserActive
 }
