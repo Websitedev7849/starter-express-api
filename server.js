@@ -132,7 +132,7 @@ app.post("/signup", async (req, res) => {
 
 })
 
-app.post("/isUserActive", async (req, res) => {
+app.post("/isUserActive", checkUserValidity ,async (req, res) => {
   const {username} = req.body;
   try {
     const socketInfo = await db.isUserActive(username)

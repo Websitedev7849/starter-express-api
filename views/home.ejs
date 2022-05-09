@@ -88,6 +88,10 @@
           body: JSON.stringify({username})
         })
 
+        if (response.redirected === true){
+          window.location.assign("/")
+        }
+
         console.log(response);
         alert.classList.remove("d-none")
 
