@@ -1,3 +1,7 @@
 .form_background {
-    background: #f9f9f9;
+    background: #2e3134;
+}
+
+#username, #username:focus {
+    background: #1a1818;
 }
