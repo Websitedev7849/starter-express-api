@@ -134,7 +134,6 @@ app.post("/signup", async (req, res) => {
 
 app.post("/isUserActive", async (req, res) => {
   const {username} = req.body;
-  console.log(username);
   try {
     const socketInfo = await db.isUserActive(username)
     // socketInfo = [
@@ -145,7 +144,6 @@ app.post("/isUserActive", async (req, res) => {
     //   }
     // ]
 
-    console.log(socketInfo);
 
     if (socketInfo.length == 0) { // if user is not online
       res.status(404).send({
