@@ -36,6 +36,7 @@
 
           <div class="alert mt-5 alert-primary d-none" role="alert">
             <p class="fs-6 text-center" style="color: black; height: 0.5rem">  </p>
+            <button type="button" class="connect-btn btn btn-success mt-3 d-none" style="margin-left: 3.6rem;">Connect Now</button>
           </div>
         </div>
         
@@ -64,15 +65,15 @@
 
     const form = document.querySelector(".form");
     const alert = document.querySelector(".alert");
+    const connectBtn = document.querySelector(".connect-btn");
     const input = document.querySelector("#username");
 
     input.addEventListener("focus", e=>{
       // RESET ALERT
       alert.classList.add("d-none");
+      connectBtn.classList.add("d-none")
       alert.classList.remove("alert-warning")
     })
-
-    
 
     form.addEventListener("submit", async e=>{
       e.preventDefault()
@@ -88,18 +89,21 @@
           body: JSON.stringify({username})
         })
 
+        // if not logged in
         if (response.redirected === true){
           window.location.assign("/")
-        }
+        } //else ...
 
-        console.log(response);
+
+        const body = await response.json()
         alert.classList.remove("d-none")
 
         if (response.status === 200) {
-          alert.children[0].innerText = "User is online"
+          alert.children[0].innerText = `User ${body.username} is online`
+          connectBtn.classList.remove("d-none")
         }
         else {
-          alert.children[0].innerText = "User is offline"
+          alert.children[0].innerText = `User ${body.username} is offline`
           alert.classList.add("alert-warning")
         }
         
@@ -111,5 +115,14 @@
 
     })
 
+
+    function getCookie(cname) {
+      const arrayb = document.cookie.split(";");
+      for (const item of arrayb) {
+        if (item.startsWith(`${cname}=`)){
+            return item.substr(6);
+        }
+      }
+    }
   </script>
 </html>
