@@ -63,6 +63,10 @@
       console.log(data);
     })
 
+    socket.on("conn_req", (data)=>{
+      console.log(data);
+    })
+
     const form = document.querySelector(".form");
     const alert = document.querySelector(".alert");
     const connectBtn = document.querySelector(".connect-btn");
@@ -101,15 +105,21 @@
         if (response.status === 200) {
           alert.children[0].innerText = `User ${body.username} is online`
           connectBtn.classList.remove("d-none")
+
+          connectBtn.addEventListener("click", e=>{
+            socket.emit("connect-to-user", body.socketID)
+          })
         }
         else {
           alert.children[0].innerText = `User ${body.username} is offline`
           alert.classList.add("alert-warning")
+          connectBtn.removeEventListener("click")
         }
         
       } catch (error) {
         alert.children[0].innerText = "something went wrong"
         alert.classList.add("alert-warning")
+        connectBtn.removeEventListener("click")
       }
     
 

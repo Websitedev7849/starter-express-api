@@ -187,6 +187,10 @@ io.on('connection', (socket) => {
      
     }
 
+    socket.on("connect-to-user", async (socketID) => {
+      io.sockets.in(socketID).emit("conn_req", {msg: `${username} wants to connect.`})
+    })
+
     socket.on("disconnect", () => {
       console.log(`user ${username} disconnected with id ${socket.id}`);
 
