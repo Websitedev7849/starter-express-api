@@ -23,3 +23,16 @@ module.exports.checkUserValidity = function (req, res, next) {
 
     
 }
+
+module.exports.verifyJWT = function (JWT) {
+    return new Promise((resolve, reject) => {
+        jwt.verify(JWT, process.env.JWT_SECRET_KEY, (err, decodedToken) => {
+            if (err) {
+                reject(err)
+            }
+            else{
+                resolve(decodedToken)
+            }
+        })
+    })
+}

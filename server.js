@@ -11,7 +11,7 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 
 const db = require("./src/db")
-const { checkUserValidity } = require("./middlewares/checkUserValidity")
+const { checkUserValidity, verifyJWT } = require("./middlewares/checkUserValidity")
 
 
 const HOSTNAME = "localhost"
@@ -163,10 +163,24 @@ app.post("/isUserActive", checkUserValidity ,async (req, res) => {
   }
 })
 
-io.on('connection', (socket) => {
+const homeSocket = io.of("/home")
+homeSocket.use(async (socket,next) => {
+  const jwt = socket.request._query["jwt_token"];
+  try {
+    const decodedToken = await verifyJWT(jwt);
+    console.log(decodedToken);
+    next()
+  } catch (error) {
+    console.log(error);
+    io.of("/home").in(socket.id).emit("new_msg", {msg: "user_not_valid"})
+  }
+  
+})
+
+
+homeSocket.on('connection', (socket) => {
   socket.on("user-connected", async (username, userID) => {
 
-    console.log(`User ${username} userID: ${userID} connected with socket id : ${socket.id}`);
 
     try {
 
@@ -175,20 +189,24 @@ io.on('connection', (socket) => {
 
       // join a room name after its socket id
       socket.join(socket.id)
+      console.log(`User ${username} userID: ${userID} connected with socket id : ${socket.id}`);
+
     } catch (error) {
 
       // if user id is already present in ActiveUsers Table
       if (error.code === 'ER_DUP_ENTRY') {
-        io.sockets.in(socket.id).emit("new_msg", {msg: "already_logged_in"})
+        io.of("/home").in(socket.id).emit("new_msg", {msg: "already_logged_in"})
       }
       else{
-        io.sockets.in(socket.id).emit("new_msg", {msg: "something_went_wrong"})
+        io.of("/home").in(socket.id).emit("new_msg", {msg: "something_went_wrong"})
       }
      
     }
 
     socket.on("connect-to-user", async (socketID) => {
-      io.sockets.in(socketID).emit("conn_req", {msg: `${username} wants to connect.`})
+      console.log("connect-to-user", socketID);
+      // io.sockets.in(socketID).emit("conn_req", {msg: `${username} wants to connect.`})
+      io.of("/home").in(socketID).emit("conn_req", {msg: `${username} wants to connect.`})
     })
 
     socket.on("disconnect", () => {
