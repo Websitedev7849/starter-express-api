@@ -113,13 +113,14 @@
         else {
           alert.children[0].innerText = `User ${body.username} is offline`
           alert.classList.add("alert-warning")
-          connectBtn.removeEventListener("click")
+          // connectBtn.removeEventListener("click")
         }
         
       } catch (error) {
+        console.log(error);
         alert.children[0].innerText = "something went wrong"
         alert.classList.add("alert-warning")
-        connectBtn.removeEventListener("click")
+        // connectBtn.removeEventListener("click")
       }
     
 
