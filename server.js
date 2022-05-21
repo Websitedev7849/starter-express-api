@@ -40,7 +40,7 @@ homeSocket.use(async (socket,next) => {
   const jwt = socket.request._query["jwt_token"];
   try {
     const decodedToken = await verifyJWT(jwt);
-    console.log(decodedToken);
+    // console.log(decodedToken);
     next()
   } catch (error) {
     console.log(error);
@@ -76,7 +76,6 @@ homeSocket.on('connection', (socket) => {
     }
 
     socket.on("connect-to-user", async (socketID) => {
-      console.log("connect-to-user", socketID);
       // io.sockets.in(socketID).emit("conn_req", {msg: `${username} wants to connect.`})
       io.of("/home").in(socketID).emit("conn_req", {msg: `${username} wants to connect.`})
     })

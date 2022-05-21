@@ -5,3 +5,30 @@
 #username, #username:focus {
     background: #1a1818;
 }
+
+.requests-window{
+    position: fixed;
+    top: 0;
+    right: -70vw;
+    height: 100vh;
+    width: 70vw;
+    transition: right 0.5s ease-in;
+    z-index: 1;
+    /* -webkit-box-shadow: 10px 10px 12px -11px rgba(0,0,0,0.76); */
+    /* -moz-box-shadow: 10px 10px 12px -11px rgba(0,0,0,0.76); */
+    box-shadow: 12px -11px 10px 10px #161616c2;
+    background: #2e3134;
+}
+
+    .requests-window-header{
+        height: 3rem;
+    }
+
+
+
+@media screen and (min-width: 576px){
+    .requests-window {
+        width: 30vw;
+        right: 0vw;
+    }
+}

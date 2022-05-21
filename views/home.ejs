@@ -44,7 +44,28 @@
       </div>
     </div>
   </div>
+  
+  <div class="requests-window">
+    <div class="requests-window-header d-flex align-items-center justify-content-around container-fluid w-100 bg-dark">
+      
+      <p class="text-white fs-6 mt-3">Chat Requests</p>
+
+      <div class="close-request-win-btn d-sm-none">
+        <svg fill="#fff" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="22px" height="22px">
+          <path d="M 4.7070312 3.2929688 L 3.2929688 4.7070312 L 10.585938 12 L 3.2929688 
+          19.292969 L 4.7070312 20.707031 L 12 13.414062 L 19.292969 20.707031 L 
+          20.707031 19.292969 L 13.414062 12 L 20.707031 4.7070312 L 19.292969 3.2929688 L 12 10.585938 L 4.7070312 3.2929688 z"/>
+        </svg>
+      </div>
+    </div>
     
+  </div>
+
+  <div class="requests-window-btn d-sm-none position-fixed top-0 end-0 mt-3 me-3">
+    <svg fill="#fff" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="35px" height="35px">
+      <path d="M 2 5 L 2 7 L 22 7 L 22 5 L 2 5 z M 2 11 L 2 13 L 22 13 L 22 11 L 2 11 z M 2 17 L 2 19 L 22 19 L 22 17 L 2 17 z"/>
+    </svg>
+  </div>
 </body>
 
   <!-- Option 1: Bootstrap Bundle with Popper -->
@@ -134,5 +155,18 @@
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
   }
+  </script>
+  <script>
+    const requestsWindowBtn = document.querySelector(".requests-window-btn")
+    const requestsWindow = document.querySelector(".requests-window")
+    const closeRequstWinBtn = document.querySelector(".close-request-win-btn")
+
+    requestsWindowBtn.addEventListener("click", e=>{
+      requestsWindow.style.right = "0vw"
+    })
+
+    closeRequstWinBtn.addEventListener("click", e=>{
+      requestsWindow.style.right = "-70vw"
+    })
   </script>
 </html>
