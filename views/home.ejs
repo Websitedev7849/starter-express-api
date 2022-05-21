@@ -16,7 +16,7 @@
 </head>
 <body class="bg-dark">
 
-  <div class="d-block">
+  <div class="d-block main">
     <div class="container">
       <div class="d-flex mt-5 flex-column align-items-center">
         <p class="fs-2 text-white"><%= username %></p>
@@ -58,6 +58,10 @@
         </svg>
       </div>
     </div>
+
+    <div class="request-window-body p-3">
+     
+    </div>
     
   </div>
 
@@ -76,7 +80,6 @@
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const JWTToken = getCookie("jwt");
-    console.log(JWTToken);
     const socket = io("/home", {query: `jwt_token=${JWTToken}`});
     const username = "<%= username %>"
     const userID = "<%= userID %>"
@@ -86,14 +89,17 @@
       console.log(data);
     })
 
-    socket.on("conn_req", (data)=>{
-      console.log(data);
-    })
+    
 
     const form = document.querySelector(".form");
     const alert = document.querySelector(".alert");
     const connectBtn = document.querySelector(".connect-btn");
     const input = document.querySelector("#username");
+    const requestsWindowBody = document.querySelector(".request-window-body")
+
+    socket.on("conn_req", (data)=>{
+      requestsWindowBody.innerHTML = generateTag(data.username)
+    })
 
     input.addEventListener("focus", e=>{
       // RESET ALERT
@@ -154,6 +160,15 @@
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  function generateTag(username) {
+    return `
+      <div class="user-req-msg p-2 mt-3 border">
+        <p class="text-white m-0"><span class="text-danger">${username}</span> wants to connect.</p>
+        <button class="btn btn-link m-0">accept</button>
+      </div>
+    `
   }
   </script>
   <script>

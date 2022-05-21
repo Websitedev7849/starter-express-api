@@ -77,7 +77,10 @@ homeSocket.on('connection', (socket) => {
 
     socket.on("connect-to-user", async (socketID) => {
       // io.sockets.in(socketID).emit("conn_req", {msg: `${username} wants to connect.`})
-      io.of("/home").in(socketID).emit("conn_req", {msg: `${username} wants to connect.`})
+      io.of("/home").in(socketID).emit("conn_req", {
+        msg: `${username} wants to connect.`,
+        username: username
+      })
     })
 
     socket.on("disconnect", () => {

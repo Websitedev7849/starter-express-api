@@ -18,11 +18,16 @@
     /* -moz-box-shadow: 10px 10px 12px -11px rgba(0,0,0,0.76); */
     box-shadow: 12px -11px 10px 10px #161616c2;
     background: #2e3134;
+    overflow-y: scroll;
 }
 
     .requests-window-header{
         height: 3rem;
     }
+
+    /* .requests-window-body{
+        overflow-y: scroll;
+    } */
 
 
 
