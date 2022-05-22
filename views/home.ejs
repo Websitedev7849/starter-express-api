@@ -88,6 +88,12 @@
     socket.on("new_msg", function (data) {
       console.log(data);
     })
+    
+    // join the room when server another user accepts the chat request
+    socket.on("req_accepted", function (data) {
+    console.log("request accepted");
+      window.open(`/chat/${data.chatRoomID}`)
+    })
 
     
 
@@ -173,8 +179,22 @@
     `
   }
 
+  // generate a room id and send to reqSenderSocketID to join
   function handleAccept(reqSenderSocketID) {
-    location.href = `/chat?reqSenderSocketID=${reqSenderSocketID}`
+    const chatRoomID = generateRandomRoomID(20)
+    socket.emit("accept-req", reqSenderSocketID, chatRoomID)
+    
+    window.open(`/chat/${chatRoomID}`)
+  }
+
+  function generateRandomRoomID(length) {
+    let result           = '';
+    let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+   return result;
   }
   </script>
   <script>

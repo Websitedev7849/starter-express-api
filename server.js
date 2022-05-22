@@ -84,6 +84,16 @@ homeSocket.on('connection', (socket) => {
       })
     })
 
+    // get the room id from acceptor and send it to request sender to join
+    socket.on("accept-req", async (reqSenderSocketID, chatRoomID) => {
+      console.log("accepting request", reqSenderSocketID);
+      
+      io.of("/home").in(reqSenderSocketID).emit("req_accepted", {
+        receiverSocketID: socket.id,
+        chatRoomID: chatRoomID
+      })
+    })
+
     socket.on("disconnect", () => {
       console.log(`user ${username} disconnected with id ${socket.id}`);
 
@@ -98,6 +108,22 @@ homeSocket.on('connection', (socket) => {
 
 });
 
+const chatSocket = io.of("/chat")
+chatSocket.use(async (socket,next) => {
+  const jwt = socket.request._query["jwt_token"];
+  try {
+    const decodedToken = await verifyJWT(jwt);
+    // console.log(decodedToken);
+    next()
+  } catch (error) {
+    console.log(error);
+    io.of("/chat").in(socket.id).emit("new_msg", {msg: "user_not_valid"})
+  }
+  
+})
+chatSocket.on("connect", socket => {
+
+})
 
 
 server.listen(PORT, HOSTNAME,() => {
