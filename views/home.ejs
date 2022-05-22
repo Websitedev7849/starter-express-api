@@ -98,7 +98,7 @@
     const requestsWindowBody = document.querySelector(".request-window-body")
 
     socket.on("conn_req", (data)=>{
-      requestsWindowBody.innerHTML = generateTag(data.username)
+      requestsWindowBody.innerHTML += generateTag(data.username)
     })
 
     input.addEventListener("focus", e=>{
@@ -165,7 +165,7 @@
   function generateTag(username) {
     return `
       <div class="user-req-msg p-2 mt-3 border">
-        <p class="text-white m-0"><span class="text-danger">${username}</span> wants to connect.</p>
+        <p class="text-white m-0"><span class="text-success">${username}</span> wants to connect.</p>
         <button class="btn btn-link m-0">accept</button>
       </div>
     `
