@@ -79,7 +79,8 @@ homeSocket.on('connection', (socket) => {
       // io.sockets.in(socketID).emit("conn_req", {msg: `${username} wants to connect.`})
       io.of("/home").in(socketID).emit("conn_req", {
         msg: `${username} wants to connect.`,
-        username: username
+        username: username,
+        reqSenderSocketID: socket.id
       })
     })
 
@@ -96,6 +97,7 @@ homeSocket.on('connection', (socket) => {
   })
 
 });
+
 
 
 server.listen(PORT, HOSTNAME,() => {

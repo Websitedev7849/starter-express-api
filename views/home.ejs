@@ -98,8 +98,10 @@
     const requestsWindowBody = document.querySelector(".request-window-body")
 
     socket.on("conn_req", (data)=>{
-      requestsWindowBody.innerHTML += generateTag(data.username)
+      requestsWindowBody.innerHTML += generateTag(data.username, data.reqSenderSocketID)
     })
+
+    
 
     input.addEventListener("focus", e=>{
       // RESET ALERT
@@ -162,13 +164,17 @@
     if (parts.length === 2) return parts.pop().split(';').shift();
   }
 
-  function generateTag(username) {
+  function generateTag(username, reqSenderSocketID) {
     return `
       <div class="user-req-msg p-2 mt-3 border">
         <p class="text-white m-0"><span class="text-success">${username}</span> wants to connect.</p>
-        <button class="btn btn-link m-0">accept</button>
+        <button class="accept-btn btn btn-link m-0" reqSenderSocketID="${reqSenderSocketID}" onclick="handleAccept('${reqSenderSocketID}')">accept</button>
       </div>
     `
+  }
+
+  function handleAccept(reqSenderSocketID) {
+    location.href = `/chat?reqSenderSocketID=${reqSenderSocketID}`
   }
   </script>
   <script>
