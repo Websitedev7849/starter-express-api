@@ -92,7 +92,7 @@
     // join the room when server another user accepts the chat request
     socket.on("req_accepted", function (data) {
     console.log("request accepted");
-      window.open(`/chat/${data.chatRoomID}`)
+      location.href = `/chat/${data.chatRoomID}`
     })
 
     
@@ -184,7 +184,7 @@
     const chatRoomID = generateRandomRoomID(20)
     socket.emit("accept-req", reqSenderSocketID, chatRoomID)
     
-    window.open(`/chat/${chatRoomID}`)
+    location.href = `/chat/${chatRoomID}`
   }
 
   function generateRandomRoomID(length) {
