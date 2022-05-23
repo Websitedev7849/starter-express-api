@@ -100,7 +100,7 @@ function isUserValid(username, password) {
 function registerActiveUser(userID, socketID) {
     return new Promise((res, rej) => {
 
-        const sql = `INSERT INTO ActiveUsers VALUES ("${userID}", "${socketID}");`
+        const sql = `INSERT INTO activeusers VALUES ("${userID}", "${socketID}");`
 
         const con = getConnection();
 
@@ -118,7 +118,7 @@ function registerActiveUser(userID, socketID) {
 function deRegisterActiveUser(userID) {
     return new Promise((res, rej) => {
 
-        const sql = `DELETE FROM ActiveUsers WHERE userID = "${userID}";`
+        const sql = `DELETE FROM activeusers WHERE userID = "${userID}";`
         const con = getConnection()
 
         con.query(sql, function (err) {
