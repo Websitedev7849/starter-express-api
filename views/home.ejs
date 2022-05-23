@@ -92,7 +92,7 @@
     // join the room when server another user accepts the chat request
     socket.on("req_accepted", function (data) {
     console.log("request accepted");
-      location.href = `/chat/${data.chatRoomID}`
+      location.href = `/chat/${data.chatRoomID}?reqSenderUsername=${data.reqSenderUsername}`
     })
 
     
@@ -174,17 +174,17 @@
     return `
       <div class="user-req-msg p-2 mt-3 border">
         <p class="text-white m-0"><span class="text-success">${username}</span> wants to connect.</p>
-        <button class="accept-btn btn btn-link m-0" reqSenderSocketID="${reqSenderSocketID}" onclick="handleAccept('${reqSenderSocketID}')">accept</button>
+        <button class="accept-btn btn btn-link m-0" reqSenderSocketID="${reqSenderSocketID}" onclick="handleAccept('${reqSenderSocketID}', '${username}')">accept</button>
       </div>
     `
   }
 
   // generate a room id and send to reqSenderSocketID to join
-  function handleAccept(reqSenderSocketID) {
+  function handleAccept(reqSenderSocketID, reqSenderUsername) {
     const chatRoomID = generateRandomRoomID(20)
-    socket.emit("accept-req", reqSenderSocketID, chatRoomID)
+    socket.emit("accept-req", reqSenderSocketID, username, chatRoomID)
     
-    location.href = `/chat/${chatRoomID}`
+    location.href = `/chat/${chatRoomID}?reqSenderUsername=${reqSenderUsername}`
   }
 
   function generateRandomRoomID(length) {

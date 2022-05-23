@@ -85,11 +85,12 @@ homeSocket.on('connection', (socket) => {
     })
 
     // get the room id from acceptor and send it to request sender to join
-    socket.on("accept-req", async (reqSenderSocketID, chatRoomID) => {
+    socket.on("accept-req", async (reqSenderSocketID, reqAcceptorUsername,chatRoomID) => {
       console.log("accepting request", reqSenderSocketID);
       
       io.of("/home").in(reqSenderSocketID).emit("req_accepted", {
         receiverSocketID: socket.id,
+        reqSenderUsername: reqAcceptorUsername,
         chatRoomID: chatRoomID
       })
     })
@@ -122,7 +123,13 @@ chatSocket.use(async (socket,next) => {
   
 })
 chatSocket.on("connect", socket => {
+  socket.on("user-connected", (username, userID) => {
+    console.log(`User ${username} userID: ${userID} joined chat room with socket id : ${socket.id}`);
+  })
 
+  socket.on("join-chat-room", roomID=>{
+    socket.join(roomID)
+  })
 })
 
 

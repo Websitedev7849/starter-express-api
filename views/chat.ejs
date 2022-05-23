@@ -19,7 +19,7 @@
     <div class="d-block p-3 vh-100 vw-100 bg-dark">
         <div class="d-flex flex-column friends-block mb-3 ms-3 me-3 h-50 ">
             <div class="d-block user-info">
-                <p class="fs-4 text-success ms-3 mt-2 mb-0">SAM_WINCHESTER:</p>
+                <p class="fs-4 text-success ms-3 mt-2 mb-0"><%= reqSenderUsername %>:</p>
             </div>
             <div class="message">
                 <p class="fs-4 text-white p-2 ps-4">Do you copy?</p>
@@ -45,6 +45,23 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
+    const JWTToken = getCookie("jwt");
+    const socket = io("/chat", {query: `jwt_token=${JWTToken}`});
+    const username = "<%= username %>"
+    const userID = "<%= userID %>"
+    const roomID = "<%= roomID %>"
 
+    socket.emit("user-connected", username, userID)
+    socket.emit("join-chat-room", roomID)
+
+    socket.emit("new-message", "this is new message")
+    // console.log(username, userID);
+
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
   </script>
 </html>
