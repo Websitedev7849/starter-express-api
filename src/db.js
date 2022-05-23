@@ -27,7 +27,7 @@ function isUserAlreadyExist(username) {
             con.end()
 
             // resolve false if record exists
-            if (result.length == 0) {
+            if (result && result.length == 0) {
                 res(false)
             }
             
@@ -78,7 +78,7 @@ function isUserValid(username, password) {
             // ]
             con.end()
             
-            if (result.length !== 0) {
+            if (result && result.length !== 0) {
                 res({ id: result[0].id, username: result[0].username })
             }
             else{
