@@ -3,7 +3,7 @@
 }
 
     .friends-block .message{
-        overflow: scroll;
+        overflow-y: scroll;
         /* scrollbar-width: none; */
         /* -ms-overflow-style: none;  IE and Edge */
     }
