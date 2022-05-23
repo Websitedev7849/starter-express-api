@@ -64,6 +64,7 @@ homeSocket.on('connection', (socket) => {
       console.log(`User ${username} userID: ${userID} connected with socket id : ${socket.id}`);
 
     } catch (error) {
+      console.log(error);
 
       // if user id is already present in ActiveUsers Table
       if (error.code === 'ER_DUP_ENTRY') {
