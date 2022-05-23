@@ -15,7 +15,7 @@ const { verifyJWT } = require("./middlewares/checkUserValidity")
 const router = require("./routes/RouteHandler")
 
 const HOSTNAME = "localhost"
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 
 app.use( express.json() );
 app.use( bodyParser.json() );  
@@ -138,6 +138,6 @@ chatSocket.on("connect", socket => {
 })
 
 
-server.listen(PORT, HOSTNAME,() => {
-  console.log(`listening on http://${HOSTNAME}:${PORT}`);
+server.listen(PORT, () => {
+  console.log(`listening on http://localhost:${PORT}`);
 });
