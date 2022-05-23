@@ -1,0 +1,16 @@
+.friends-block {
+    background: #2e3134;
+}
+
+    .friends-block .message{
+        overflow: scroll;
+        /* scrollbar-width: none; */
+        /* -ms-overflow-style: none;  IE and Edge */
+    }
+    ::-webkit-scrollbar {
+        width: 0;  /* Remove scrollbar space */
+        background: transparent;  /* Optional: just make scrollbar invisible */
+    }
+.users-block {
+    background: #3c3d3e;
+}

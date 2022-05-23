@@ -142,7 +142,7 @@ router.post("/isUserActive", checkUserValidity ,async (req, res) => {
 router.get("/chat/:roomID", checkUserValidity, (req, res)=>{
   // const reqSenderSocketID = req.query["reqSenderSocketID"]
   
-  res.send(`<h1>${req.params.roomID}<h1>`)
+  res.render("chat")
 })
 
 module.exports = router

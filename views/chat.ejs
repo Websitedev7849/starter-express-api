@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
+    <link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet" >
+
+
+    <link rel="stylesheet" href="/css/chat.css">
+
+    <title>Home</title>
+</head>
+<body>
+
+    <div class="d-block p-3 vh-100 vw-100 bg-dark">
+        <div class="d-flex flex-column friends-block mb-3 ms-3 me-3 h-50 ">
+            <div class="d-block user-info">
+                <p class="fs-4 text-success ms-3 mt-2 mb-0">SAM_WINCHESTER:</p>
+            </div>
+            <div class="message">
+                <p class="fs-4 text-white p-2 ps-4">Do you copy?</p>
+            </div>
+        </div>
+        <div class="d-flex flex-column users-block ms-3 me-3 h-50 ">
+            <div class="user-info">
+                <p class="fs-4 text-danger ms-3 mt-3">You:</p>
+                <div class="d-flex justify-content-center w-100 inputMessage">
+                    <textarea class="bg-dark text-white p-3" style="resize: none;" cols="190" rows="10"
+                    placeholder="Start Typing..."></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
+  <script src="/js/bootstrap/bootstrap.bundle.min.js" ></script>
+
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+
+  </script>
+</html>
