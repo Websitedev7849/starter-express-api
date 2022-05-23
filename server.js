@@ -15,7 +15,7 @@ const { verifyJWT } = require("./middlewares/checkUserValidity")
 const router = require("./routes/RouteHandler")
 
 const HOSTNAME = "localhost"
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
 
 app.use( express.json() );
 app.use( bodyParser.json() );  
