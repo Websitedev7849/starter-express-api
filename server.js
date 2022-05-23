@@ -130,6 +130,11 @@ chatSocket.on("connect", socket => {
   socket.on("join-chat-room", roomID=>{
     socket.join(roomID)
   })
+
+  socket.on("new-message", (roomID, message) => {
+    // console.log(message);
+    socket.to(roomID).emit("new_message", message)
+  })
 })
 
 

@@ -22,15 +22,14 @@
                 <p class="fs-4 text-success ms-3 mt-2 mb-0"><%= reqSenderUsername %>:</p>
             </div>
             <div class="message">
-                <p class="fs-4 text-white p-2 ps-4">Do you copy?</p>
+                <p class="fs-4 text-white p-2 ps-4"></p>
             </div>
         </div>
-        <div class="d-flex flex-column users-block ms-3 me-3 h-50 ">
+        <div class="d-flex flex-column users-block ms-3 me-3 vh-50 ">
             <div class="user-info">
                 <p class="fs-4 text-danger ms-3 mt-3">You:</p>
                 <div class="d-flex justify-content-center w-100 inputMessage">
-                    <textarea class="bg-dark text-white p-3" style="resize: none;" cols="190" rows="10"
-                    placeholder="Start Typing..."></textarea>
+                    <textarea class="bg-dark text-white p-3" style="resize: none; height: 100%;" cols="190" placeholder="Start Typing..."></textarea>
                 </div>
             </div>
         </div>
@@ -51,12 +50,25 @@
     const userID = "<%= userID %>"
     const roomID = "<%= roomID %>"
 
+    const inputMessage = document.querySelector(".inputMessage textarea")
+    const receivedMessage = document.querySelector(".message p")
+
+
+    inputMessage.addEventListener("keyup", e=>{
+        // console.log(e.target.value);
+        socket.emit("new-message", roomID , `${e.target.value}`)
+    })
+
     socket.emit("user-connected", username, userID)
     socket.emit("join-chat-room", roomID)
 
-    socket.emit("new-message", "this is new message")
+    
     // console.log(username, userID);
 
+    socket.on("new_message", message => {
+        // console.log("message received from server");
+        receivedMessage.innerText = message
+    })
 
     function getCookie(name) {
         const value = `; ${document.cookie}`;
