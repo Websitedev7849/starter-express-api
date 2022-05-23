@@ -14,6 +14,7 @@ function getConnection() {
 function isUserAlreadyExist(username) {
 
     const con = getConnection()
+    con.connect()
 
     const sql = `SELECT * FROM users WHERE username = '${username}'`
 
@@ -42,6 +43,7 @@ function isUserAlreadyExist(username) {
 function createUser(username, password) {
 
     const con = getConnection()
+    con.connect()
 
     const generatedUserId = crypto.randomBytes(10).toString('hex');
     // e.g 351ea7a3980b9fa5142c
@@ -69,6 +71,7 @@ function isUserValid(username, password) {
      
         const sql = `SELECT * FROM users WHERE username="${username}" AND password="${password}";`
         const con = getConnection()
+        con.connect()
 
         con.query(sql, function (err, result) {
             if (err) rej(err);
@@ -102,7 +105,8 @@ function registerActiveUser(userID, socketID) {
 
         const sql = `INSERT INTO activeusers VALUES ("${userID}", "${socketID}");`
 
-        const con = getConnection();
+        const con = getConnection()
+        con.connect();
 
         con.query(sql, function (err, result) {
             if (err) rej(err)
@@ -120,6 +124,7 @@ function deRegisterActiveUser(userID) {
 
         const sql = `DELETE FROM activeusers WHERE userID = "${userID}";`
         const con = getConnection()
+        con.connect()
 
         con.query(sql, function (err) {
             if (err) rej(err)
@@ -139,6 +144,7 @@ function isUserActive(username) {
                     WHERE users.id = activeusers.userID 
                     AND users.username = "${username}"`
         const con = getConnection()
+        con.connect()
 
         con.query(sql, function (err, result) {
             if (err) rej(err)
